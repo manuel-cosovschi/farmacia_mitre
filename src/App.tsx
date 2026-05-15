@@ -1,187 +1,142 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import {
-  Menu, X, Phone, MapPin, Clock, Instagram, MessageCircle,
-  ShieldCheck, Zap, ShoppingCart, Search,
-  Plus, Minus, Trash2, XCircle, Info, CheckCircle2,
-  Flame, Dumbbell, Pill, Leaf, FlaskConical, Star
+  Menu, X, MapPin, Clock, Instagram, MessageCircle, Mail, Phone,
+  ShieldCheck, Zap, ShoppingCart, Search, Award, Stethoscope,
+  Plus, Minus, XCircle, Info, CheckCircle2, ChevronRight,
+  Flame, Dumbbell, Leaf, FlaskConical, Star, Truck
 } from 'lucide-react';
+
+const WHATSAPP = '5492230000000';
+const wa = (text: string) => `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(text)}`;
 
 const PRODUCT_DATA = [
   // Proteínas
-  {
-    id: 1, category: 'Proteínas', name: 'Whey Protein Chocolate', brand: 'Star Nutrition',
-    description: 'Proteína de suero de leche sabor chocolate, ideal para recuperación muscular post-entrenamiento. 24g de proteína por porción.',
-    price: '$ 45.000', priceNumeric: 45000,
-    img: 'https://images.unsplash.com/photo-1593095948071-474c5cc2989d?auto=format&fit=crop&w=600&q=80',
-    stock: 'Disponible'
-  },
-  {
-    id: 2, category: 'Proteínas', name: 'Whey Protein Vainilla', brand: 'ENA Sport',
-    description: 'Proteína premium sabor vainilla. 25g de proteína pura por servicio, con aminoácidos esenciales.',
-    price: '$ 42.500', priceNumeric: 42500,
-    img: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?auto=format&fit=crop&w=600&q=80',
-    stock: 'Poco stock'
-  },
-  {
-    id: 3, category: 'Proteínas', name: 'Proteína Isolate', brand: 'Gold Nutrition',
-    description: 'Proteína aislada de máxima pureza. Cero carbohidratos, cero grasas, máxima absorción y digestibilidad.',
-    price: '$ 58.000', priceNumeric: 58000,
-    img: 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&w=600&q=80',
-    stock: 'Disponible'
-  },
-  {
-    id: 4, category: 'Proteínas', name: 'Protein Blend', brand: 'BSN',
-    description: 'Mezcla de proteínas de rápida y lenta absorción para nutrición proteica constante durante el día.',
-    price: '$ Consultar', priceNumeric: 0,
-    img: 'https://images.unsplash.com/photo-1583454110551-21f2fa2afe61?auto=format&fit=crop&w=600&q=80',
-    stock: 'Consultar stock'
-  },
+  { id: 1,  category: 'Proteínas',    name: 'Whey Protein Chocolate',     brand: 'Star Nutrition', size: '1 kg',  desc: 'Proteína de suero sabor chocolate. 24g por porción para recuperación post-entrenamiento.',                price: '$ 45.000', priceNumeric: 45000, stock: 'Disponible' },
+  { id: 2,  category: 'Proteínas',    name: 'Whey Protein Vainilla',      brand: 'ENA Sport',      size: '1 kg',  desc: 'Proteína premium sabor vainilla con aminoácidos esenciales. 25g de proteína pura por servicio.',          price: '$ 42.500', priceNumeric: 42500, stock: 'Poco stock' },
+  { id: 3,  category: 'Proteínas',    name: 'Proteína Isolate',           brand: 'Gold Nutrition', size: '900 g', desc: 'Proteína aislada de máxima pureza. Cero carbohidratos, cero grasas y máxima absorción.',                price: '$ 58.000', priceNumeric: 58000, stock: 'Disponible' },
+  { id: 4,  category: 'Proteínas',    name: 'Protein Blend',              brand: 'BSN',            size: '2 kg',  desc: 'Mezcla de proteínas de rápida y lenta absorción para una nutrición proteica sostenida en el tiempo.',     price: '$ Consultar', priceNumeric: 0, stock: 'Consultar stock' },
   // Creatinas
-  {
-    id: 5, category: 'Creatinas', name: 'Creatina Monohidratada', brand: 'Star Nutrition',
-    description: '100% creatina monohidratada pura. Mayor fuerza, potencia explosiva y volumen muscular demostrado.',
-    price: '$ 22.000', priceNumeric: 22000,
-    img: 'https://images.unsplash.com/photo-1622483767028-3f66f32aef97?auto=format&fit=crop&w=600&q=80',
-    stock: 'Disponible'
-  },
-  {
-    id: 6, category: 'Creatinas', name: 'Creatina Micronizada', brand: 'ENA Sport',
-    description: 'Partículas micronizadas para absorción ultra rápida. Mejor solubilidad y máxima biodisponibilidad.',
-    price: '$ 25.000', priceNumeric: 25000,
-    img: 'https://images.unsplash.com/photo-1627384113743-6bd5a479fffd?auto=format&fit=crop&w=600&q=80',
-    stock: 'Disponible'
-  },
-  {
-    id: 7, category: 'Creatinas', name: 'Creatina Saborizada', brand: 'Gentech',
-    description: 'Creatina con sabor a fruit punch. Fácil de disolver, deliciosa y con el mismo poder de la monohidratada.',
-    price: '$ 26.500', priceNumeric: 26500,
-    img: 'https://images.unsplash.com/photo-1594882645126-14020914d58d?auto=format&fit=crop&w=600&q=80',
-    stock: 'Poco stock'
-  },
-  {
-    id: 8, category: 'Creatinas', name: 'Creatina Premium Creapure', brand: 'Universal',
-    description: 'Creatina de grado farmacéutico importada con sello Creapure®. La más pura del mercado, certificada.',
-    price: '$ Consultar', priceNumeric: 0,
-    img: 'https://images.unsplash.com/photo-1579722820308-d74e571900a9?auto=format&fit=crop&w=600&q=80',
-    stock: 'Consultar stock'
-  },
+  { id: 5,  category: 'Creatinas',    name: 'Creatina Monohidratada',     brand: 'Star Nutrition', size: '300 g', desc: '100% creatina monohidratada pura. Mayor fuerza, potencia explosiva y volumen muscular.',                price: '$ 22.000', priceNumeric: 22000, stock: 'Disponible' },
+  { id: 6,  category: 'Creatinas',    name: 'Creatina Micronizada',       brand: 'ENA Sport',      size: '300 g', desc: 'Partículas micronizadas para absorción ultra rápida. Mejor solubilidad y biodisponibilidad.',            price: '$ 25.000', priceNumeric: 25000, stock: 'Disponible' },
+  { id: 7,  category: 'Creatinas',    name: 'Creatina Saborizada',        brand: 'Gentech',        size: '350 g', desc: 'Creatina con sabor fruit punch. Fácil de disolver, deliciosa, mismo poder de la monohidratada.',          price: '$ 26.500', priceNumeric: 26500, stock: 'Poco stock' },
+  { id: 8,  category: 'Creatinas',    name: 'Creatina Premium Creapure',  brand: 'Universal',      size: '500 g', desc: 'Creatina de grado farmacéutico con sello Creapure®. La más pura del mercado, certificada.',              price: '$ Consultar', priceNumeric: 0, stock: 'Consultar stock' },
   // Pre-entrenos
-  {
-    id: 9, category: 'Pre-entrenos', name: 'Pre Workout Energy', brand: 'Star Nutrition',
-    description: 'Fórmula estimulante con cafeína, beta-alanina y arginina. Energía explosiva y concentración máxima.',
-    price: '$ 35.000', priceNumeric: 35000,
-    img: 'https://images.unsplash.com/photo-1647427017013-0599cf0622c8?auto=format&fit=crop&w=600&q=80',
-    stock: 'Disponible'
-  },
-  {
-    id: 10, category: 'Pre-entrenos', name: 'Pre Workout Pump', brand: 'ENA Sport',
-    description: 'Fórmula sin estimulantes para mayor bombeo muscular y vascularización extrema. Ideal para la tarde/noche.',
-    price: '$ 33.500', priceNumeric: 33500,
-    img: 'https://images.unsplash.com/photo-1552689486-f6773047d89f?auto=format&fit=crop&w=600&q=80',
-    stock: 'Disponible'
-  },
-  {
-    id: 11, category: 'Pre-entrenos', name: 'C4 Pre Entrenamiento', brand: 'Cellucor',
-    description: 'El pre-workout más vendido del mundo. Efecto inmediato y prolongado, sabores exclusivos.',
-    price: '$ Consultar', priceNumeric: 0,
-    img: 'https://images.unsplash.com/photo-1648083838407-7e61ea70a599?auto=format&fit=crop&w=600&q=80',
-    stock: 'Disponible'
-  },
-  {
-    id: 12, category: 'Pre-entrenos', name: 'Cafeína + Energía 200mg', brand: 'Gentech',
-    description: 'Cápsulas de cafeína anhidra pura 200mg. Impulso rápido, sin azúcar, sin calorías extras.',
-    price: '$ 15.000', priceNumeric: 15000,
-    img: 'https://images.unsplash.com/photo-1628771065518-0d82f1938462?auto=format&fit=crop&w=600&q=80',
-    stock: 'Disponible'
-  },
+  { id: 9,  category: 'Pre-entrenos', name: 'Pre Workout Energy',         brand: 'Star Nutrition', size: '300 g', desc: 'Fórmula con cafeína, beta-alanina y arginina. Energía explosiva y concentración máxima.',                price: '$ 35.000', priceNumeric: 35000, stock: 'Disponible' },
+  { id: 10, category: 'Pre-entrenos', name: 'Pre Workout Pump',           brand: 'ENA Sport',      size: '300 g', desc: 'Fórmula sin estimulantes. Bombeo muscular y vascularización extrema, ideal para la tarde/noche.',         price: '$ 33.500', priceNumeric: 33500, stock: 'Disponible' },
+  { id: 11, category: 'Pre-entrenos', name: 'C4 Pre Entrenamiento',       brand: 'Cellucor',       size: '180 g', desc: 'El pre-workout más vendido del mundo. Efecto inmediato y prolongado, sabores exclusivos.',                price: '$ Consultar', priceNumeric: 0, stock: 'Disponible' },
+  { id: 12, category: 'Pre-entrenos', name: 'Cafeína + Energía 200mg',    brand: 'Gentech',        size: '60 cáps', desc: 'Cápsulas de cafeína anhidra pura 200mg. Impulso rápido, sin azúcar, sin calorías extras.',              price: '$ 15.000', priceNumeric: 15000, stock: 'Disponible' },
   // Aminoácidos
-  {
-    id: 13, category: 'Aminoácidos', name: 'BCAA 2:1:1 Instantizado', brand: 'Star Nutrition',
-    description: 'Aminoácidos ramificados en ratio 2:1:1 (leucina, isoleucina, valina). Evita la fatiga y promueve la recuperación.',
-    price: '$ 18.500', priceNumeric: 18500,
-    img: 'https://images.unsplash.com/photo-1621570277341-35b1d4410e30?auto=format&fit=crop&w=600&q=80',
-    stock: 'Disponible'
-  },
-  {
-    id: 14, category: 'Aminoácidos', name: 'EAA Essential Amino', brand: 'ENA Sport',
-    description: 'Los 9 aminoácidos esenciales completos. Soporte anabólico total para músculo y recuperación profunda.',
-    price: '$ 21.000', priceNumeric: 21000,
-    img: 'https://images.unsplash.com/photo-1553530666-ba11a7da3888?auto=format&fit=crop&w=600&q=80',
-    stock: 'Disponible'
-  },
-  {
-    id: 15, category: 'Aminoácidos', name: 'L-Glutamina Micronizada', brand: 'Nutrilab',
-    description: 'Aminoácido clave para la recuperación intestinal, muscular e inmunológica. Pura, sin aditivos.',
-    price: '$ 16.000', priceNumeric: 16000,
-    img: 'https://images.unsplash.com/photo-1576602976047-174e57a47881?auto=format&fit=crop&w=600&q=80',
-    stock: 'Disponible'
-  },
-  {
-    id: 16, category: 'Aminoácidos', name: 'XTEND Recovery Blend', brand: 'Xtend',
-    description: 'Fórmula hidratante con electrolitos, BCAAs y glutamina. La recuperación deportiva más completa.',
-    price: '$ Consultar', priceNumeric: 0,
-    img: 'https://images.unsplash.com/photo-1600857948687-cc59aeb42323?auto=format&fit=crop&w=600&q=80',
-    stock: 'Consultar stock'
-  },
-  // Vitaminas y bienestar
-  {
-    id: 17, category: 'Vitaminas', name: 'Multivitamínico Sport', brand: 'Centrum',
-    description: 'Complejo completo de vitaminas y minerales formulado para atletas con altas exigencias físicas.',
-    price: '$ 12.000', priceNumeric: 12000,
-    img: 'https://images.unsplash.com/photo-1584017911766-d451b3d0e843?auto=format&fit=crop&w=600&q=80',
-    stock: 'Disponible'
-  },
-  {
-    id: 18, category: 'Vitaminas', name: 'Magnesio Bisglicinato', brand: 'Natufarma',
-    description: 'Forma quelada de alta absorción. Ideal para prevenir calambres, mejorar el sueño y relajar la musculatura.',
-    price: '$ 9.500', priceNumeric: 9500,
-    img: 'https://images.unsplash.com/photo-1640536417724-4ea0d6b63ca5?auto=format&fit=crop&w=600&q=80',
-    stock: 'Disponible'
-  },
-  {
-    id: 19, category: 'Vitaminas', name: 'Omega 3 Triple Concentrado', brand: 'Solgar',
-    description: 'Alta concentración de EPA y DHA. Soporte cardiovascular, articular y antiinflamatorio de primera línea.',
-    price: '$ 14.500', priceNumeric: 14500,
-    img: 'https://images.unsplash.com/photo-1577401239170-897942555fb3?auto=format&fit=crop&w=600&q=80',
-    stock: 'Disponible'
-  },
-  {
-    id: 20, category: 'Vitaminas', name: 'Vitamina D3 5000 IU', brand: 'Solaray',
-    description: 'Dosis terapéutica de vitamina D3. Crucial para fijación de calcio, inmunidad y testosterona.',
-    price: '$ 11.000', priceNumeric: 11000,
-    img: 'https://images.unsplash.com/photo-1584308666744-24d5e4b2d3af?auto=format&fit=crop&w=600&q=80',
-    stock: 'Poco stock'
-  },
+  { id: 13, category: 'Aminoácidos',  name: 'BCAA 2:1:1 Instantizado',    brand: 'Star Nutrition', size: '300 g', desc: 'Aminoácidos ramificados en ratio 2:1:1 (leucina, isoleucina, valina). Evita la fatiga y recupera.',       price: '$ 18.500', priceNumeric: 18500, stock: 'Disponible' },
+  { id: 14, category: 'Aminoácidos',  name: 'EAA Essential Amino',        brand: 'ENA Sport',      size: '400 g', desc: 'Los 9 aminoácidos esenciales completos. Soporte anabólico total y recuperación profunda.',                price: '$ 21.000', priceNumeric: 21000, stock: 'Disponible' },
+  { id: 15, category: 'Aminoácidos',  name: 'L-Glutamina Micronizada',    brand: 'Nutrilab',       size: '300 g', desc: 'Aminoácido clave para recuperación intestinal, muscular e inmunológica. Pura, sin aditivos.',             price: '$ 16.000', priceNumeric: 16000, stock: 'Disponible' },
+  { id: 16, category: 'Aminoácidos',  name: 'XTEND Recovery Blend',       brand: 'Xtend',          size: '420 g', desc: 'Fórmula hidratante con electrolitos, BCAAs y glutamina. Recuperación deportiva completa.',                price: '$ Consultar', priceNumeric: 0, stock: 'Consultar stock' },
+  // Vitaminas
+  { id: 17, category: 'Vitaminas',    name: 'Multivitamínico Sport',      brand: 'Centrum',        size: '60 cáps', desc: 'Complejo completo de vitaminas y minerales formulado para atletas con altas exigencias físicas.',       price: '$ 12.000', priceNumeric: 12000, stock: 'Disponible' },
+  { id: 18, category: 'Vitaminas',    name: 'Magnesio Bisglicinato',      brand: 'Natufarma',      size: '90 cáps', desc: 'Forma quelada de alta absorción. Previene calambres, mejora el sueño y relaja la musculatura.',          price: '$ 9.500',  priceNumeric: 9500,  stock: 'Disponible' },
+  { id: 19, category: 'Vitaminas',    name: 'Omega 3 Triple Concentrado', brand: 'Solgar',         size: '60 cáps', desc: 'Alta concentración de EPA y DHA. Soporte cardiovascular, articular y antiinflamatorio.',                  price: '$ 14.500', priceNumeric: 14500, stock: 'Disponible' },
+  { id: 20, category: 'Vitaminas',    name: 'Vitamina D3 5000 IU',        brand: 'Solaray',        size: '60 cáps', desc: 'Dosis terapéutica de vitamina D3. Fijación de calcio, inmunidad y testosterona.',                        price: '$ 11.000', priceNumeric: 11000, stock: 'Poco stock' },
 ];
 
 const SUPPLEMENT_CATEGORIES = ['Todos', 'Proteínas', 'Creatinas', 'Pre-entrenos', 'Aminoácidos', 'Vitaminas'];
 
-const CATEGORY_META: Record<string, { icon: React.ReactNode; color: string; bg: string; desc: string }> = {
-  'Proteínas':    { icon: <Dumbbell size={22} />,     color: 'text-blue-600',   bg: 'bg-blue-50',   desc: '4 productos' },
-  'Creatinas':    { icon: <Zap size={22} />,           color: 'text-yellow-600', bg: 'bg-yellow-50', desc: '4 productos' },
-  'Pre-entrenos': { icon: <Flame size={22} />,         color: 'text-orange-600', bg: 'bg-orange-50', desc: '4 productos' },
-  'Aminoácidos':  { icon: <FlaskConical size={22} />,  color: 'text-purple-600', bg: 'bg-purple-50', desc: '4 productos' },
-  'Vitaminas':    { icon: <Leaf size={22} />,           color: 'text-green-600',  bg: 'bg-green-50',  desc: '4 productos' },
+type CategoryKey = 'Proteínas' | 'Creatinas' | 'Pre-entrenos' | 'Aminoácidos' | 'Vitaminas';
+
+const CATEGORY_META: Record<CategoryKey, {
+  icon: React.ComponentType<{ size?: number; strokeWidth?: number; className?: string }>;
+  color: string; bg: string; ring: string; gradFrom: string; gradTo: string; hex: string; format: string;
+}> = {
+  'Proteínas':    { icon: Dumbbell,     color: 'text-blue-600',   bg: 'bg-blue-50',   ring: 'ring-blue-200',   gradFrom: 'from-blue-100',   gradTo: 'to-blue-50',    hex: '#2563eb', format: 'Polvo'   },
+  'Creatinas':    { icon: Zap,          color: 'text-amber-600',  bg: 'bg-amber-50',  ring: 'ring-amber-200',  gradFrom: 'from-amber-100',  gradTo: 'to-amber-50',   hex: '#d97706', format: 'Polvo'   },
+  'Pre-entrenos': { icon: Flame,        color: 'text-orange-600', bg: 'bg-orange-50', ring: 'ring-orange-200', gradFrom: 'from-orange-100', gradTo: 'to-orange-50',  hex: '#ea580c', format: 'Polvo'   },
+  'Aminoácidos':  { icon: FlaskConical, color: 'text-purple-600', bg: 'bg-purple-50', ring: 'ring-purple-200', gradFrom: 'from-purple-100', gradTo: 'to-purple-50',  hex: '#9333ea', format: 'Polvo'   },
+  'Vitaminas':    { icon: Leaf,         color: 'text-green-600',  bg: 'bg-green-50',  ring: 'ring-green-200',  gradFrom: 'from-green-100',  gradTo: 'to-green-50',   hex: '#16a34a', format: 'Cápsulas' },
 };
 
-interface CartItem {
+interface CartItem { product: typeof PRODUCT_DATA[0]; quantity: number; }
+
+// ====================================================================
+//  ProductVisual — generated supplement-container mockup per category.
+//  Replaces broken/unreliable stock photos with a clean, on-brand visual.
+// ====================================================================
+const ProductVisual = ({ product, variant = 'card' }: {
   product: typeof PRODUCT_DATA[0];
-  quantity: number;
-}
+  variant?: 'card' | 'modal' | 'thumb';
+}) => {
+  const meta = CATEGORY_META[product.category as CategoryKey];
+  const Icon = meta.icon;
+  const isThumb = variant === 'thumb';
+  const isModal = variant === 'modal';
+
+  return (
+    <div className={`relative w-full h-full overflow-hidden bg-gradient-to-br ${meta.gradFrom} ${meta.gradTo}`}>
+      {/* Dotted pattern bg */}
+      <div className="absolute inset-0 opacity-[0.06]" style={{
+        backgroundImage: `radial-gradient(circle, ${meta.hex} 1.4px, transparent 1.4px)`,
+        backgroundSize: isThumb ? '12px 12px' : '22px 22px',
+      }} />
+
+      {/* Category icon faded as backdrop */}
+      <div className={`absolute -bottom-4 -right-4 ${meta.color} opacity-[0.10]`}>
+        <Icon size={isThumb ? 60 : isModal ? 240 : 180} strokeWidth={1.2} />
+      </div>
+
+      {/* Center: supplement container mockup */}
+      <div className="absolute inset-0 flex items-center justify-center p-3">
+        <div className={`relative ${isThumb ? 'w-[78%] h-[88%]' : 'w-[62%] h-[86%]'} bg-white rounded-[14%/8%] shadow-lg border border-gray-100 flex flex-col items-center justify-between overflow-hidden`}>
+          {/* Cap band */}
+          <div className={`absolute top-0 inset-x-0 ${meta.bg} h-[14%] flex items-center justify-center border-b border-gray-100`}>
+            <div className={`w-12 h-[5px] rounded-full ${meta.color.replace('text-', 'bg-')}/40`} />
+          </div>
+
+          {/* Label area */}
+          <div className="flex-1 w-full flex flex-col items-center justify-center pt-[14%] px-2 text-center">
+            {!isThumb && (
+              <p className={`text-[8px] sm:text-[9px] font-black uppercase tracking-[0.18em] ${meta.color} mb-1`}>
+                {product.brand}
+              </p>
+            )}
+            <div className={`${meta.color} my-1`}>
+              <Icon size={isThumb ? 22 : isModal ? 56 : 38} strokeWidth={1.8} />
+            </div>
+            {!isThumb && (
+              <>
+                <p className={`text-[10px] sm:text-[11px] ${isModal ? 'sm:text-sm' : ''} font-black uppercase tracking-wide text-gray-900 leading-tight line-clamp-2 px-1 max-w-full`}>
+                  {product.name}
+                </p>
+                <p className="text-[8px] sm:text-[9px] font-bold text-gray-400 mt-1 uppercase tracking-wider">
+                  {meta.format} · {product.size}
+                </p>
+              </>
+            )}
+          </div>
+
+          {/* Bottom band */}
+          <div className={`w-full ${meta.bg} h-[8%] border-t border-gray-100 flex items-center justify-center`}>
+            {!isThumb && (
+              <span className={`text-[8px] font-black uppercase tracking-widest ${meta.color}`}>
+                {product.category}
+              </span>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 // --- Logo ---
 const Logo = () => (
-  <div className="flex items-center gap-2.5 select-none group cursor-pointer">
+  <a href="#inicio" className="flex items-center gap-2.5 select-none group">
     <div className="relative flex items-center justify-center w-11 h-11 bg-pharma-primary rounded-xl shadow-lg shadow-pharma-primary/30 group-hover:scale-105 transition-transform">
       <Plus size={28} strokeWidth={3} className="text-white absolute" />
-      <span className="font-heading font-black text-white text-xs relative z-10 mt-4 ml-4">24</span>
+      <span className="font-heading font-black text-white text-[10px] relative z-10 mt-4 ml-4">24</span>
     </div>
     <div className="flex flex-col">
       <span className="font-heading font-black text-lg leading-none text-pharma-dark tracking-tight">farmacia</span>
       <span className="font-heading font-bold text-sm leading-none text-pharma-primary tracking-widest uppercase">mitre</span>
     </div>
-  </div>
+  </a>
 );
 
 // --- Navbar ---
@@ -216,18 +171,16 @@ const Navbar = ({ cartCount, onOpenCart }: { cartCount: number; onOpenCart: () =
           </nav>
           <div className="hidden md:flex items-center gap-3">
             <button onClick={onOpenCart} className="relative flex items-center gap-2 px-4 py-2 text-pharma-dark hover:bg-pharma-light rounded-full transition-colors font-semibold text-sm">
-              <ShoppingCart size={20} />
-              Pedido
+              <ShoppingCart size={20} /> Pedido
               {cartCount > 0 && (
                 <span className="absolute -top-1 -right-1 flex items-center justify-center bg-pharma-accent text-white text-[10px] font-black h-5 w-5 rounded-full border-2 border-white">
                   {cartCount}
                 </span>
               )}
             </button>
-            <a href="https://wa.me/5492230000000" target="_blank" rel="noreferrer"
+            <a href={wa('Hola Farmacia Mitre, quería hacer una consulta.')} target="_blank" rel="noreferrer"
               className="flex items-center gap-2 bg-pharma-primary text-white px-5 py-2.5 rounded-full font-bold text-sm hover:bg-pharma-dark transition-colors shadow-md shadow-pharma-primary/25">
-              <MessageCircle size={16} />
-              Consultar
+              <MessageCircle size={16} /> Consultar
             </a>
           </div>
           <div className="md:hidden flex items-center gap-3">
@@ -239,7 +192,7 @@ const Navbar = ({ cartCount, onOpenCart }: { cartCount: number; onOpenCart: () =
                 </span>
               )}
             </button>
-            <button onClick={() => setIsOpen(!isOpen)} className="p-2 text-pharma-dark bg-gray-100 rounded-lg">
+            <button onClick={() => setIsOpen(!isOpen)} className="p-2 text-pharma-dark bg-gray-100 rounded-lg" aria-label="Menu">
               {isOpen ? <X size={22} /> : <Menu size={22} />}
             </button>
           </div>
@@ -260,10 +213,9 @@ const Navbar = ({ cartCount, onOpenCart }: { cartCount: number; onOpenCart: () =
                   {link.name}
                 </a>
               ))}
-              <a href="https://wa.me/5492230000000" target="_blank" rel="noreferrer"
+              <a href={wa('Hola Farmacia Mitre, quería hacer una consulta.')} target="_blank" rel="noreferrer"
                 className="mt-3 flex w-full items-center justify-center gap-2 bg-pharma-primary text-white px-5 py-3 rounded-xl font-bold shadow-md">
-                <MessageCircle size={18} />
-                Consultar por WhatsApp
+                <MessageCircle size={18} /> Consultar por WhatsApp
               </a>
             </div>
           </motion.div>
@@ -275,48 +227,35 @@ const Navbar = ({ cartCount, onOpenCart }: { cartCount: number; onOpenCart: () =
 
 // --- Hero ---
 const Hero = () => (
-  <section id="inicio" className="relative pt-28 pb-0 lg:pt-36 overflow-hidden bg-white">
-    {/* Subtle grid background */}
-    <div className="absolute inset-0 opacity-[0.035]"
+  <section id="inicio" className="relative pt-28 pb-12 lg:pt-36 lg:pb-20 overflow-hidden bg-white">
+    <div className="absolute inset-0 opacity-[0.04]"
       style={{ backgroundImage: 'linear-gradient(to right, #0a4f32 1px, transparent 1px), linear-gradient(to bottom, #0a4f32 1px, transparent 1px)', backgroundSize: '48px 48px' }} />
 
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-      <div className="grid lg:grid-cols-2 gap-12 items-end">
-        {/* Left: Copy */}
-        <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.55 }}
-          className="pb-16 lg:pb-24"
-        >
+      <div className="grid lg:grid-cols-2 gap-12 items-center">
+        <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.55 }}>
           <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-pharma-light text-pharma-dark text-xs font-bold mb-6 border border-pharma-primary/20 tracking-wide">
             <ShieldCheck size={14} className="text-pharma-primary" />
             Farmacia Mitre · Mar del Plata · 24hs
           </div>
-
           <h1 className="text-4xl sm:text-5xl lg:text-[3.5rem] font-black font-heading text-pharma-dark leading-[1.1] mb-5 tracking-tight">
             Suplementación <br />
             <span className="text-pharma-primary">de alto rendimiento</span><br />
             con respaldo farmacéutico
           </h1>
-
           <p className="text-base text-gray-500 mb-8 max-w-md leading-relaxed">
             Las mejores marcas nacionales e importadas. Asesoramiento real, stock actualizado y precios claros. Retirá el mismo día.
           </p>
-
           <div className="flex flex-wrap gap-3 mb-10">
             <a href="#catalogo"
               className="flex items-center gap-2 bg-pharma-primary text-white px-7 py-3.5 rounded-full font-bold hover:bg-pharma-dark transition-all shadow-lg shadow-pharma-primary/30 hover:-translate-y-0.5">
-              Ver catálogo completo
+              Ver catálogo completo <ChevronRight size={18} />
             </a>
-            <a href="https://wa.me/5492230000000" target="_blank" rel="noreferrer"
+            <a href={wa('Hola, quiero consultar stock y precios de suplementos.')} target="_blank" rel="noreferrer"
               className="flex items-center gap-2 bg-white text-gray-700 border border-gray-200 px-7 py-3.5 rounded-full font-bold hover:border-pharma-primary hover:text-pharma-primary transition-colors shadow-sm">
-              <MessageCircle size={18} />
-              Consultar stock
+              <MessageCircle size={18} /> Consultar stock
             </a>
           </div>
-
-          {/* Stats row */}
           <div className="flex gap-8 pt-6 border-t border-gray-100">
             {[
               { val: '+20', label: 'Marcas' },
@@ -331,45 +270,86 @@ const Hero = () => (
           </div>
         </motion.div>
 
-        {/* Right: hero image flush to bottom */}
-        <motion.div
-          initial={{ opacity: 0, x: 30 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.6, delay: 0.15 }}
-          className="relative hidden lg:flex items-end justify-center"
-        >
-          {/* green blob */}
-          <div className="absolute bottom-0 right-0 w-[90%] h-[85%] bg-gradient-to-br from-pharma-light to-pharma-primary/10 rounded-t-[3rem] rounded-bl-[3rem]" />
-
-          <img
-            src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?auto=format&fit=crop&w=900&q=85"
-            alt="Suplementos deportivos"
-            className="relative z-10 w-[88%] rounded-t-[2.5rem] object-cover object-top shadow-2xl"
-            style={{ maxHeight: '520px' }}
-          />
-
-          {/* Floating badge */}
-          <div className="absolute bottom-8 -left-4 z-20 bg-white px-4 py-3 rounded-2xl shadow-xl border border-gray-100 flex items-center gap-3">
-            <div className="w-10 h-10 bg-yellow-50 rounded-xl flex items-center justify-center text-yellow-500">
-              <Star size={20} fill="currentColor" />
+        {/* Right: Visual showcase — 5 floating category cards */}
+        <motion.div initial={{ opacity: 0, scale: 0.92 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.6, delay: 0.15 }}
+          className="relative hidden lg:block h-[520px]">
+          <div className="absolute inset-0 bg-gradient-to-br from-pharma-light to-pharma-primary/5 rounded-[3rem]" />
+          {(Object.keys(CATEGORY_META) as CategoryKey[]).map((cat, i) => {
+            const meta = CATEGORY_META[cat];
+            const Icon = meta.icon;
+            const positions = [
+              'top-[8%] left-[10%] rotate-[-6deg]',
+              'top-[6%] right-[12%] rotate-[5deg]',
+              'top-[40%] left-[25%] rotate-[2deg] scale-110 z-10',
+              'bottom-[10%] left-[8%] rotate-[4deg]',
+              'bottom-[8%] right-[10%] rotate-[-5deg]',
+            ];
+            return (
+              <motion.div
+                key={cat}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3 + i * 0.08, duration: 0.5 }}
+                className={`absolute ${positions[i]} w-32 bg-white rounded-2xl shadow-xl border border-gray-100 p-4 hover:scale-110 hover:rotate-0 transition-all cursor-default`}
+              >
+                <div className={`w-10 h-10 ${meta.bg} ${meta.color} rounded-xl flex items-center justify-center mb-2`}>
+                  <Icon size={20} strokeWidth={2} />
+                </div>
+                <p className="text-xs font-black text-pharma-dark">{cat}</p>
+                <p className="text-[10px] text-gray-400 font-semibold">4 productos</p>
+              </motion.div>
+            );
+          })}
+          <div className="absolute bottom-6 -left-3 z-20 bg-white px-3.5 py-2.5 rounded-2xl shadow-xl border border-gray-100 flex items-center gap-2.5">
+            <div className="w-9 h-9 bg-yellow-50 rounded-lg flex items-center justify-center text-yellow-500">
+              <Star size={18} fill="currentColor" />
             </div>
             <div>
-              <p className="text-xs font-bold text-gray-900">Productos originales</p>
-              <p className="text-[11px] text-gray-400 font-medium">Garantía de autenticidad</p>
+              <p className="text-[11px] font-black text-gray-900">Productos originales</p>
+              <p className="text-[10px] text-gray-400 font-medium">Garantía de autenticidad</p>
             </div>
           </div>
         </motion.div>
       </div>
     </div>
-
-    {/* Wave divider */}
-    <div className="relative -mb-1 mt-8 lg:mt-0">
-      <svg viewBox="0 0 1440 80" xmlns="http://www.w3.org/2000/svg" className="w-full block" preserveAspectRatio="none" style={{ height: '80px' }}>
-        <path d="M0,40 C360,80 1080,0 1440,40 L1440,80 L0,80 Z" fill="#f8fafc" />
-      </svg>
-    </div>
   </section>
 );
+
+// --- Nosotros section ---
+const Nosotros = () => {
+  const features = [
+    { icon: Stethoscope,  title: 'Atención farmacéutica',  desc: 'Te asesora un profesional matriculado, no un vendedor.' },
+    { icon: Award,        title: 'Productos originales',   desc: 'Solo marcas auditadas con trazabilidad de origen.' },
+    { icon: Truck,        title: 'Retiro 24hs',            desc: 'Pedido listo el mismo día en Av. Independencia 1234.' },
+    { icon: MessageCircle,title: 'Consulta directa',       desc: 'Hablás por WhatsApp con quien te va a atender.' },
+  ];
+  return (
+    <section id="nosotros" className="py-16 lg:py-20 bg-white border-y border-gray-100">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="text-center max-w-2xl mx-auto mb-12">
+          <span className="inline-block bg-pharma-primary/10 text-pharma-primary font-bold px-4 py-1.5 rounded-full text-xs tracking-widest uppercase mb-4">Nosotros</span>
+          <h2 className="text-3xl md:text-4xl font-black font-heading text-pharma-dark mb-3">
+            Una farmacia de barrio con espalda profesional
+          </h2>
+          <p className="text-gray-500">
+            Hace más de 20 años en Mar del Plata. Suplementación deportiva con la misma seriedad que un medicamento: marca, lote, vencimiento y consejo real.
+          </p>
+        </div>
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-5">
+          {features.map((f) => (
+            <div key={f.title} className="bg-pharma-bg rounded-2xl p-6 border border-gray-100 hover:border-pharma-primary/30 hover:shadow-md transition-all">
+              <div className="w-12 h-12 bg-pharma-light text-pharma-primary rounded-xl flex items-center justify-center mb-4">
+                <f.icon size={22} />
+              </div>
+              <h3 className="font-bold text-pharma-dark mb-1">{f.title}</h3>
+              <p className="text-sm text-gray-500 leading-relaxed">{f.desc}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
 
 // --- Category Showcase ---
 const CategoryShowcase = ({ onSelectCategory }: { onSelectCategory: (cat: string) => void }) => (
@@ -380,30 +360,32 @@ const CategoryShowcase = ({ onSelectCategory }: { onSelectCategory: (cat: string
         <h2 className="text-2xl font-black font-heading text-pharma-dark">¿Qué buscás hoy?</h2>
       </div>
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
-        {Object.entries(CATEGORY_META).map(([cat, meta]) => (
-          <button
-            key={cat}
-            onClick={() => onSelectCategory(cat)}
-            className="group flex flex-col items-center gap-3 p-5 bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all"
-          >
-            <div className={`w-12 h-12 ${meta.bg} ${meta.color} rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform`}>
-              {meta.icon}
-            </div>
-            <div className="text-center">
-              <p className="font-bold text-sm text-gray-900">{cat}</p>
-              <p className="text-[11px] text-gray-400 font-medium">{meta.desc}</p>
-            </div>
-          </button>
-        ))}
+        {(Object.entries(CATEGORY_META) as [CategoryKey, typeof CATEGORY_META[CategoryKey]][]).map(([cat, meta]) => {
+          const Icon = meta.icon;
+          const count = PRODUCT_DATA.filter(p => p.category === cat).length;
+          return (
+            <button
+              key={cat}
+              onClick={() => onSelectCategory(cat)}
+              className="group flex flex-col items-center gap-3 p-5 bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all"
+            >
+              <div className={`w-12 h-12 ${meta.bg} ${meta.color} rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform`}>
+                <Icon size={22} />
+              </div>
+              <div className="text-center">
+                <p className="font-bold text-sm text-gray-900">{cat}</p>
+                <p className="text-[11px] text-gray-400 font-medium">{count} productos</p>
+              </div>
+            </button>
+          );
+        })}
       </div>
     </div>
   </section>
 );
 
 // --- Catalog ---
-const Catalog = ({
-  onAddToCart, onShowModal, initialCategory, onCategoryUsed
-}: {
+const Catalog = ({ onAddToCart, onShowModal, initialCategory, onCategoryUsed }: {
   onAddToCart: (p: typeof PRODUCT_DATA[0]) => void;
   onShowModal: (p: typeof PRODUCT_DATA[0]) => void;
   initialCategory: string | null;
@@ -435,21 +417,15 @@ const Catalog = ({
     return 'text-gray-400 border-gray-100 bg-gray-50';
   };
 
-  const catMeta = CATEGORY_META[activeTab];
-
   return (
     <section id="catalogo" className="py-20 bg-pharma-bg">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Header */}
         <div className="text-center max-w-2xl mx-auto mb-12">
-          <span className="inline-block bg-pharma-primary/10 text-pharma-primary font-bold px-4 py-1.5 rounded-full text-xs tracking-widest uppercase mb-4">
-            Catálogo Online
-          </span>
+          <span className="inline-block bg-pharma-primary/10 text-pharma-primary font-bold px-4 py-1.5 rounded-full text-xs tracking-widest uppercase mb-4">Catálogo Online</span>
           <h2 className="text-3xl md:text-4xl font-black font-heading text-pharma-dark mb-3">Suplementos Deportivos</h2>
           <p className="text-gray-500">Seleccioná, consultá y retirá. Simple.</p>
         </div>
 
-        {/* Search */}
         <div className="max-w-lg mx-auto mb-8 relative">
           <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
           <input
@@ -461,37 +437,26 @@ const Catalog = ({
           />
         </div>
 
-        {/* Tabs */}
         <div className="flex flex-wrap justify-center gap-2 mb-10">
           {SUPPLEMENT_CATEGORIES.map(tab => {
-            const m = CATEGORY_META[tab];
+            const m = CATEGORY_META[tab as CategoryKey];
             const active = activeTab === tab;
+            const Icon = m?.icon;
             return (
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
                 className={`flex items-center gap-2 px-4 py-2.5 rounded-full text-sm font-bold transition-all ${
-                  active
-                    ? 'bg-pharma-dark text-white shadow-md'
-                    : 'bg-white text-gray-600 hover:bg-gray-50 border border-gray-200'
+                  active ? 'bg-pharma-dark text-white shadow-md' : 'bg-white text-gray-600 hover:bg-gray-50 border border-gray-200'
                 }`}
               >
-                {m && <span className={active ? 'text-white' : m.color}>{m.icon}</span>}
+                {Icon && <Icon size={16} className={active ? 'text-white' : m.color} />}
                 {tab}
               </button>
             );
           })}
         </div>
 
-        {/* Active category label */}
-        {catMeta && (
-          <div className={`inline-flex items-center gap-2 mb-8 px-4 py-2 rounded-xl ${catMeta.bg} ${catMeta.color} font-bold text-sm`}>
-            {catMeta.icon}
-            {activeTab} — {filteredProducts.length} productos
-          </div>
-        )}
-
-        {/* Grid */}
         {filteredProducts.length === 0 ? (
           <div className="text-center py-20 bg-white rounded-3xl border border-gray-100">
             <Search size={40} className="mx-auto text-gray-200 mb-4" />
@@ -501,62 +466,53 @@ const Catalog = ({
         ) : (
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
             <AnimatePresence mode="popLayout">
-              {filteredProducts.map(product => (
-                <motion.div
-                  layout
-                  initial={{ opacity: 0, y: 16 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, scale: 0.95 }}
-                  transition={{ duration: 0.2 }}
-                  key={product.id}
-                  onClick={() => onShowModal(product)}
-                  className="group bg-white rounded-3xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all cursor-pointer flex flex-col"
-                >
-                  {/* Image */}
-                  <div className="relative bg-gray-50 aspect-square overflow-hidden">
-                    <img
-                      src={product.img}
-                      alt={product.name}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                    />
-                    {/* Stock badge */}
-                    <span className={`absolute top-3 left-3 text-[10px] font-bold px-2.5 py-1 rounded-lg border ${stockColor(product.stock)}`}>
-                      {product.stock}
-                    </span>
-                    {/* Category dot */}
-                    {CATEGORY_META[product.category] && (
-                      <span className={`absolute top-3 right-3 w-8 h-8 flex items-center justify-center rounded-xl ${CATEGORY_META[product.category].bg} ${CATEGORY_META[product.category].color} shadow-sm`}>
-                        {CATEGORY_META[product.category].icon}
+              {filteredProducts.map(product => {
+                const meta = CATEGORY_META[product.category as CategoryKey];
+                const Icon = meta.icon;
+                return (
+                  <motion.div
+                    layout
+                    initial={{ opacity: 0, y: 16 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, scale: 0.95 }}
+                    transition={{ duration: 0.2 }}
+                    key={product.id}
+                    onClick={() => onShowModal(product)}
+                    className="group bg-white rounded-3xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all cursor-pointer flex flex-col"
+                  >
+                    <div className="relative aspect-square overflow-hidden">
+                      <ProductVisual product={product} variant="card" />
+                      <span className={`absolute top-3 left-3 text-[10px] font-bold px-2.5 py-1 rounded-lg border ${stockColor(product.stock)}`}>
+                        {product.stock}
                       </span>
-                    )}
-                  </div>
-
-                  {/* Info */}
-                  <div className="p-4 flex flex-col flex-1">
-                    <p className="text-[11px] font-bold text-pharma-primary uppercase tracking-wider mb-1">{product.brand}</p>
-                    <h4 className="font-bold text-gray-900 text-sm leading-tight mb-3 line-clamp-2 flex-1">{product.name}</h4>
-                    <p className="font-heading font-black text-xl text-pharma-dark mb-4">{product.price}</p>
-
-                    <div className="flex flex-col gap-2">
-                      <button
-                        onClick={(e) => { e.stopPropagation(); onAddToCart(product); }}
-                        className="w-full flex items-center justify-center gap-1.5 bg-pharma-dark hover:bg-pharma-primary text-white py-2.5 rounded-xl font-bold text-sm transition-colors"
-                      >
-                        <Plus size={15} /> Agregar al pedido
-                      </button>
-                      <a
-                        href={`https://wa.me/5492230000000?text=Hola Farmacia Mitre, vi este producto en su catálogo web:%0A%0A*${product.name}* (${product.brand})%0APrecio: ${product.price}%0A%0A¿Tienen disponible?`}
-                        target="_blank"
-                        rel="noreferrer"
-                        onClick={(e) => e.stopPropagation()}
-                        className="w-full flex items-center justify-center gap-1.5 bg-pharma-light hover:bg-[#25D366] text-pharma-dark hover:text-white py-2.5 rounded-xl font-bold text-sm transition-colors"
-                      >
-                        <MessageCircle size={15} /> Consultar
-                      </a>
+                      <span className={`absolute top-3 right-3 w-8 h-8 flex items-center justify-center rounded-xl bg-white ${meta.color} shadow-sm border border-gray-100`}>
+                        <Icon size={16} />
+                      </span>
                     </div>
-                  </div>
-                </motion.div>
-              ))}
+                    <div className="p-4 flex flex-col flex-1">
+                      <p className="text-[11px] font-bold text-pharma-primary uppercase tracking-wider mb-1">{product.brand}</p>
+                      <h4 className="font-bold text-gray-900 text-sm leading-tight mb-3 line-clamp-2 flex-1">{product.name}</h4>
+                      <p className="font-heading font-black text-xl text-pharma-dark mb-4">{product.price}</p>
+                      <div className="flex flex-col gap-2">
+                        <button
+                          onClick={(e) => { e.stopPropagation(); onAddToCart(product); }}
+                          className="w-full flex items-center justify-center gap-1.5 bg-pharma-dark hover:bg-pharma-primary text-white py-2.5 rounded-xl font-bold text-sm transition-colors"
+                        >
+                          <Plus size={15} /> Agregar al pedido
+                        </button>
+                        <a
+                          href={wa(`Hola Farmacia Mitre, vi este producto en su catálogo web:\n\n*${product.name}* (${product.brand})\nPrecio: ${product.price}\n\n¿Tienen disponible?`)}
+                          target="_blank" rel="noreferrer"
+                          onClick={(e) => e.stopPropagation()}
+                          className="w-full flex items-center justify-center gap-1.5 bg-pharma-light hover:bg-[#25D366] text-pharma-dark hover:text-white py-2.5 rounded-xl font-bold text-sm transition-colors"
+                        >
+                          <MessageCircle size={15} /> Consultar
+                        </a>
+                      </div>
+                    </div>
+                  </motion.div>
+                );
+              })}
             </AnimatePresence>
           </div>
         )}
@@ -572,60 +528,38 @@ const ProductModal = ({ product, onClose, onAddToCart }: {
   onAddToCart: (p: typeof PRODUCT_DATA[0]) => void;
 }) => {
   if (!product) return null;
-  const meta = CATEGORY_META[product.category];
+  const meta = CATEGORY_META[product.category as CategoryKey];
+  const Icon = meta.icon;
 
   return (
     <AnimatePresence>
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-gray-900/60 backdrop-blur-sm"
-        onClick={onClose}
-      >
-        <motion.div
-          initial={{ scale: 0.95, opacity: 0, y: 20 }}
-          animate={{ scale: 1, opacity: 1, y: 0 }}
-          exit={{ scale: 0.95, opacity: 0, y: 20 }}
+      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+        className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-gray-900/60 backdrop-blur-sm" onClick={onClose}>
+        <motion.div initial={{ scale: 0.95, opacity: 0, y: 20 }} animate={{ scale: 1, opacity: 1, y: 0 }} exit={{ scale: 0.95, opacity: 0, y: 20 }}
           onClick={(e) => e.stopPropagation()}
-          className="bg-white rounded-[2rem] shadow-2xl max-w-3xl w-full overflow-hidden relative flex flex-col md:flex-row"
-        >
-          <button onClick={onClose}
-            className="absolute top-4 right-4 z-10 w-9 h-9 bg-white/80 hover:bg-gray-100 text-gray-700 rounded-full flex items-center justify-center transition-colors shadow">
+          className="bg-white rounded-[2rem] shadow-2xl max-w-3xl w-full overflow-hidden relative flex flex-col md:flex-row max-h-[90vh]">
+          <button onClick={onClose} className="absolute top-4 right-4 z-10 w-9 h-9 bg-white/90 hover:bg-gray-100 text-gray-700 rounded-full flex items-center justify-center transition-colors shadow">
             <X size={18} />
           </button>
-
-          {/* Image panel */}
-          <div className="w-full md:w-2/5 bg-gray-50 flex items-center justify-center p-8 min-h-[260px]">
-            <img src={product.img} alt={product.name} className="w-full h-full object-cover rounded-2xl shadow" style={{ maxHeight: '320px' }} />
+          <div className="w-full md:w-2/5 aspect-square md:aspect-auto md:min-h-[400px] relative">
+            <ProductVisual product={product} variant="modal" />
           </div>
-
-          {/* Details panel */}
-          <div className="w-full md:w-3/5 p-8 flex flex-col justify-center">
+          <div className="w-full md:w-3/5 p-8 flex flex-col justify-center overflow-y-auto">
             <div className="flex items-center gap-2 mb-4">
-              {meta && (
-                <span className={`w-7 h-7 flex items-center justify-center rounded-lg ${meta.bg} ${meta.color}`}>
-                  {meta.icon}
-                </span>
-              )}
+              <span className={`w-7 h-7 flex items-center justify-center rounded-lg ${meta.bg} ${meta.color}`}>
+                <Icon size={16} />
+              </span>
               <span className="text-xs font-bold text-gray-400 uppercase tracking-widest">{product.category}</span>
             </div>
             <p className="text-xs font-bold text-pharma-primary uppercase tracking-wider mb-1">{product.brand}</p>
             <h3 className="text-2xl font-heading font-black text-gray-900 leading-tight mb-3">{product.name}</h3>
-            <p className="text-gray-500 text-sm mb-5 leading-relaxed">{product.description}</p>
-
+            <p className="text-gray-500 text-sm mb-5 leading-relaxed">{product.desc}</p>
             <div className="flex items-center gap-4 mb-5 py-4 border-t border-b border-gray-100 text-sm font-semibold">
-              <div className="flex items-center gap-1.5 text-pharma-primary">
-                <CheckCircle2 size={16} /> {product.stock}
-              </div>
+              <div className="flex items-center gap-1.5 text-pharma-primary"><CheckCircle2 size={16} /> {product.stock}</div>
               <div className="w-px h-4 bg-gray-200" />
-              <div className="flex items-center gap-1.5 text-gray-500">
-                <Clock size={16} /> Retiro 24hs
-              </div>
+              <div className="flex items-center gap-1.5 text-gray-500"><Clock size={16} /> Retiro 24hs</div>
             </div>
-
             <p className="text-3xl font-black font-heading text-pharma-dark mb-6">{product.price}</p>
-
             <div className="flex flex-col gap-2.5">
               <button
                 onClick={() => { onAddToCart(product); onClose(); }}
@@ -633,11 +567,8 @@ const ProductModal = ({ product, onClose, onAddToCart }: {
               >
                 <ShoppingCart size={18} /> Agregar al pedido
               </button>
-              <a
-                href={`https://wa.me/5492230000000?text=Hola, quiero consultar sobre: *${product.name}*`}
-                target="_blank" rel="noreferrer"
-                className="w-full flex items-center justify-center gap-2 border border-gray-200 hover:border-[#25D366] hover:text-[#25D366] text-gray-600 py-3 rounded-xl font-bold text-sm transition-colors"
-              >
+              <a href={wa(`Hola, quiero consultar sobre: *${product.name}*`)} target="_blank" rel="noreferrer"
+                className="w-full flex items-center justify-center gap-2 border border-gray-200 hover:border-[#25D366] hover:text-[#25D366] text-gray-600 py-3 rounded-xl font-bold text-sm transition-colors">
                 <MessageCircle size={18} /> Consultar por WhatsApp
               </a>
             </div>
@@ -667,13 +598,11 @@ const CartSidebar = ({ isOpen, onClose, cart, setCart }: {
   }, [cart]);
 
   const generateWhatsAppMessage = () => {
-    let msg = "¡Hola Farmacia Mitre! Quiero hacer un pedido desde su catálogo web:%0A%0A🛍️ *Mi Pedido:*%0A";
-    cart.forEach(item => {
-      msg += `- ${item.quantity}x ${item.product.name} (${item.product.brand})%0A`;
-    });
-    if (totalNumeric > 0) msg += `%0A💰 *Subtotal:* $ ${totalNumeric.toLocaleString('es-AR')}%0A`;
-    if (hasConsultar) msg += "⚠️ _Confirmar precio de productos marcados como Consultar._%0A";
-    msg += "%0A¿Cómo es el proceso para retirar?";
+    let msg = "¡Hola Farmacia Mitre! Quiero hacer un pedido desde su catálogo web:\n\n🛍️ *Mi Pedido:*\n";
+    cart.forEach(item => { msg += `- ${item.quantity}x ${item.product.name} (${item.product.brand})\n`; });
+    if (totalNumeric > 0) msg += `\n💰 *Subtotal:* $ ${totalNumeric.toLocaleString('es-AR')}\n`;
+    if (hasConsultar) msg += "⚠️ _Confirmar precio de productos marcados como Consultar._\n";
+    msg += "\n¿Cómo es el proceso para retirar?";
     return msg;
   };
 
@@ -681,19 +610,12 @@ const CartSidebar = ({ isOpen, onClose, cart, setCart }: {
     <>
       <AnimatePresence>
         {isOpen && (
-          <motion.div
-            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-gray-900/40 backdrop-blur-sm z-[100]"
-            onClick={onClose}
-          />
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-gray-900/40 backdrop-blur-sm z-[100]" onClick={onClose} />
         )}
       </AnimatePresence>
-      <motion.div
-        className="fixed top-0 right-0 h-full w-full max-w-sm bg-white shadow-2xl z-[110] flex flex-col"
-        initial={{ x: '100%' }}
-        animate={{ x: isOpen ? 0 : '100%' }}
-        transition={{ type: 'spring', damping: 28, stiffness: 220 }}
-      >
+      <motion.div className="fixed top-0 right-0 h-full w-full max-w-sm bg-white shadow-2xl z-[110] flex flex-col"
+        initial={{ x: '100%' }} animate={{ x: isOpen ? 0 : '100%' }} transition={{ type: 'spring', damping: 28, stiffness: 220 }}>
         <div className="flex items-center justify-between p-5 border-b border-gray-100">
           <div className="flex items-center gap-2">
             <div className="bg-pharma-light p-2 rounded-xl text-pharma-primary"><ShoppingCart size={20} /></div>
@@ -713,11 +635,11 @@ const CartSidebar = ({ isOpen, onClose, cart, setCart }: {
             cart.map(item => (
               <div key={item.product.id} className="bg-white p-3.5 rounded-2xl shadow-sm border border-gray-100 flex gap-3 relative">
                 <button onClick={() => removeItem(item.product.id)}
-                  className="absolute -top-2 -right-2 bg-white text-gray-300 hover:text-pharma-accent rounded-full shadow-sm transition-colors">
+                  className="absolute -top-2 -right-2 bg-white text-gray-300 hover:text-pharma-accent rounded-full shadow-sm transition-colors z-10">
                   <XCircle size={18} />
                 </button>
-                <div className="w-16 h-16 bg-gray-50 rounded-xl overflow-hidden shrink-0">
-                  <img src={item.product.img} alt={item.product.name} className="w-full h-full object-cover" />
+                <div className="w-16 h-16 rounded-xl overflow-hidden shrink-0">
+                  <ProductVisual product={item.product} variant="thumb" />
                 </div>
                 <div className="flex-1 flex flex-col justify-between min-w-0">
                   <div>
@@ -753,11 +675,8 @@ const CartSidebar = ({ isOpen, onClose, cart, setCart }: {
                 Precio final incluye los productos a consultar.
               </p>
             )}
-            <a
-              href={`https://wa.me/5492230000000?text=${generateWhatsAppMessage()}`}
-              target="_blank" rel="noreferrer"
-              className="w-full flex items-center justify-center gap-2 bg-[#25D366] hover:bg-[#1ebd5a] text-white py-3.5 rounded-xl font-bold transition-colors shadow-md shadow-[#25D366]/30"
-            >
+            <a href={wa(generateWhatsAppMessage())} target="_blank" rel="noreferrer"
+              className="w-full flex items-center justify-center gap-2 bg-[#25D366] hover:bg-[#1ebd5a] text-white py-3.5 rounded-xl font-bold transition-colors shadow-md shadow-[#25D366]/30">
               <MessageCircle size={20} /> Enviar pedido por WhatsApp
             </a>
             <button onClick={onClose} className="w-full text-center mt-3 text-xs font-semibold text-gray-400 hover:text-gray-600">
@@ -771,8 +690,8 @@ const CartSidebar = ({ isOpen, onClose, cart, setCart }: {
 };
 
 // --- Footer ---
-const Footer = () => (
-  <footer className="bg-pharma-dark border-t border-pharma-dark pt-14 pb-8">
+const Footer = ({ onSelectCategory }: { onSelectCategory: (cat: string) => void }) => (
+  <footer id="contacto" className="bg-pharma-dark pt-14 pb-8">
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 mb-10">
         <div className="lg:col-span-1">
@@ -789,16 +708,31 @@ const Footer = () => (
             Tu farmacia de confianza en Mar del Plata. Especialistas en suplementación deportiva y atención 24 horas.
           </p>
           <div className="flex gap-3">
-            <a href="#" className="w-9 h-9 rounded-xl bg-white/5 flex items-center justify-center text-slate-300 hover:bg-pharma-primary hover:text-white transition-colors"><Instagram size={17} /></a>
-            <a href="#" className="w-9 h-9 rounded-xl bg-white/5 flex items-center justify-center text-slate-300 hover:bg-[#25D366] hover:text-white transition-colors"><MessageCircle size={17} /></a>
+            <a href="https://www.instagram.com/" target="_blank" rel="noreferrer"
+              className="w-9 h-9 rounded-xl bg-white/5 flex items-center justify-center text-slate-300 hover:bg-pharma-primary hover:text-white transition-colors" aria-label="Instagram">
+              <Instagram size={17} />
+            </a>
+            <a href={wa('Hola Farmacia Mitre, quería hacer una consulta.')} target="_blank" rel="noreferrer"
+              className="w-9 h-9 rounded-xl bg-white/5 flex items-center justify-center text-slate-300 hover:bg-[#25D366] hover:text-white transition-colors" aria-label="WhatsApp">
+              <MessageCircle size={17} />
+            </a>
+            <a href="mailto:contacto@farmaciamitre.com.ar"
+              className="w-9 h-9 rounded-xl bg-white/5 flex items-center justify-center text-slate-300 hover:bg-pharma-primary hover:text-white transition-colors" aria-label="Email">
+              <Mail size={17} />
+            </a>
           </div>
         </div>
 
         <div>
           <h4 className="text-white font-bold mb-4 tracking-wider uppercase text-xs">Suplementos</h4>
           <ul className="space-y-2.5">
-            {['Proteínas', 'Creatinas', 'Pre-entrenos', 'Aminoácidos', 'Vitaminas'].map(c => (
-              <li key={c}><a href="#catalogo" className="text-slate-400 hover:text-white text-sm transition-colors">{c}</a></li>
+            {(Object.keys(CATEGORY_META) as CategoryKey[]).map(c => (
+              <li key={c}>
+                <button onClick={() => onSelectCategory(c)}
+                  className="text-slate-400 hover:text-white text-sm transition-colors text-left">
+                  {c}
+                </button>
+              </li>
             ))}
           </ul>
         </div>
@@ -806,9 +740,13 @@ const Footer = () => (
         <div>
           <h4 className="text-white font-bold mb-4 tracking-wider uppercase text-xs">Farmacia</h4>
           <ul className="space-y-2.5">
-            {['Sobre nosotros', 'Cómo comprar', 'Servicios', 'Preguntas frecuentes'].map(l => (
-              <li key={l}><a href="#" className="text-slate-400 hover:text-white text-sm transition-colors">{l}</a></li>
-            ))}
+            <li><a href="#nosotros" className="text-slate-400 hover:text-white text-sm transition-colors">Sobre nosotros</a></li>
+            <li><a href={wa('Hola, ¿cómo es el proceso de compra y retiro?')} target="_blank" rel="noreferrer"
+              className="text-slate-400 hover:text-white text-sm transition-colors">Cómo comprar</a></li>
+            <li><a href={wa('Hola, quería consultar por sus servicios de farmacia.')} target="_blank" rel="noreferrer"
+              className="text-slate-400 hover:text-white text-sm transition-colors">Servicios</a></li>
+            <li><a href={wa('Hola, tengo una consulta:')} target="_blank" rel="noreferrer"
+              className="text-slate-400 hover:text-white text-sm transition-colors">Preguntas frecuentes</a></li>
           </ul>
         </div>
 
@@ -817,19 +755,26 @@ const Footer = () => (
           <ul className="space-y-3 text-sm text-slate-400">
             <li className="flex items-start gap-2.5">
               <MapPin size={16} className="text-pharma-primary shrink-0 mt-0.5" />
-              <span>Av. Independencia 1234<br />Mar del Plata</span>
+              <a href="https://maps.google.com/?q=Av.+Independencia+1234,+Mar+del+Plata"
+                target="_blank" rel="noreferrer" className="hover:text-white transition-colors">
+                Av. Independencia 1234<br />Mar del Plata
+              </a>
             </li>
             <li className="flex items-center gap-2.5">
               <Clock size={16} className="text-pharma-primary shrink-0" />
               Atención 24 Horas
             </li>
+            <li className="flex items-center gap-2.5">
+              <Phone size={16} className="text-pharma-primary shrink-0" />
+              <a href={`tel:+${WHATSAPP}`} className="hover:text-white transition-colors">+54 9 223 000-0000</a>
+            </li>
           </ul>
         </div>
       </div>
 
-      <div className="pt-6 border-t border-white/10 flex flex-col sm:flex-row justify-between items-center gap-2 text-xs text-slate-600 font-medium">
+      <div className="pt-6 border-t border-white/10 flex flex-col sm:flex-row justify-between items-center gap-2 text-xs text-slate-500 font-medium">
         <p>© {new Date().getFullYear()} Farmacia Mitre. Todos los derechos reservados.</p>
-        <div className="flex items-center gap-1 opacity-60">
+        <div className="flex items-center gap-1 opacity-70">
           <ShieldCheck size={12} /> Compra local segura
         </div>
       </div>
@@ -839,12 +784,8 @@ const Footer = () => (
 
 // --- Floating WhatsApp ---
 const FloatingWhatsApp = () => (
-  <a
-    href="https://wa.me/5492230000000"
-    target="_blank"
-    rel="noreferrer"
-    className="fixed bottom-6 right-6 z-[60] bg-[#25D366] text-white p-4 rounded-full shadow-[0_8px_30px_rgba(37,211,102,0.45)] hover:scale-110 active:scale-95 transition-all group flex items-center justify-center"
-  >
+  <a href={wa('Hola Farmacia Mitre, quería hacer una consulta.')} target="_blank" rel="noreferrer"
+    className="fixed bottom-6 right-6 z-[60] bg-[#25D366] text-white p-4 rounded-full shadow-[0_8px_30px_rgba(37,211,102,0.45)] hover:scale-110 active:scale-95 transition-all group flex items-center justify-center">
     <MessageCircle size={28} />
     <span className="absolute right-[110%] whitespace-nowrap bg-white text-gray-800 text-xs font-bold py-2 px-3 rounded-xl shadow-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
       ¡Consultanos!
@@ -872,15 +813,15 @@ function App() {
 
   const handleSelectCategory = (cat: string) => {
     setJumpCategory(cat);
-    document.getElementById('catalogo')?.scrollIntoView({ behavior: 'smooth' });
+    setTimeout(() => document.getElementById('catalogo')?.scrollIntoView({ behavior: 'smooth' }), 0);
   };
 
   return (
     <div className="min-h-screen font-sans bg-white selection:bg-pharma-primary selection:text-white">
       <Navbar cartCount={cartItemCount} onOpenCart={() => setIsCartOpen(true)} />
-
       <main>
         <Hero />
+        <Nosotros />
         <CategoryShowcase onSelectCategory={handleSelectCategory} />
         <Catalog
           onAddToCart={handleAddToCart}
@@ -889,10 +830,8 @@ function App() {
           onCategoryUsed={() => setJumpCategory(null)}
         />
       </main>
-
-      <Footer />
+      <Footer onSelectCategory={handleSelectCategory} />
       <FloatingWhatsApp />
-
       <CartSidebar isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} cart={cart} setCart={setCart} />
       <ProductModal product={selectedProduct} onClose={() => setSelectedProduct(null)} onAddToCart={handleAddToCart} />
     </div>
