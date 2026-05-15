@@ -7,7 +7,12 @@ import {
   Flame, Dumbbell, Leaf, FlaskConical, Star, Truck
 } from 'lucide-react';
 
-const WHATSAPP = '5492230000000';
+const WHATSAPP = '5492235170500';
+const PHONE_DISPLAY = '223 517-0500';
+const ADDRESS = 'Av. Patricio Peralta Ramos 2481, Mar del Plata';
+const ADDRESS_MAPS = 'https://maps.google.com/?q=Av.+Patricio+Peralta+Ramos+2481,+Mar+del+Plata';
+const HOURS = 'Todos los días 9 a 22hs';
+const INSTAGRAM = 'https://www.instagram.com/farmaciamitre2mdp/';
 const wa = (text: string) => `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(text)}`;
 
 const PRODUCT_DATA = [
@@ -129,12 +134,12 @@ const ProductVisual = ({ product, variant = 'card' }: {
 const Logo = () => (
   <a href="#inicio" className="flex items-center gap-2.5 select-none group">
     <div className="relative flex items-center justify-center w-11 h-11 bg-pharma-primary rounded-xl shadow-lg shadow-pharma-primary/30 group-hover:scale-105 transition-transform">
-      <Plus size={28} strokeWidth={3} className="text-white absolute" />
-      <span className="font-heading font-black text-white text-[10px] relative z-10 mt-4 ml-4">24</span>
+      <Plus size={26} strokeWidth={3.5} className="text-white absolute" />
+      <span className="font-heading font-black text-white text-sm relative z-10 mt-5 ml-5 leading-none">2</span>
     </div>
     <div className="flex flex-col">
       <span className="font-heading font-black text-lg leading-none text-pharma-dark tracking-tight">farmacia</span>
-      <span className="font-heading font-bold text-sm leading-none text-pharma-primary tracking-widest uppercase">mitre</span>
+      <span className="font-heading font-bold text-sm leading-none text-pharma-primary tracking-widest uppercase">mitre 2</span>
     </div>
   </a>
 );
@@ -178,7 +183,7 @@ const Navbar = ({ cartCount, onOpenCart }: { cartCount: number; onOpenCart: () =
                 </span>
               )}
             </button>
-            <a href={wa('Hola Farmacia Mitre, quería hacer una consulta.')} target="_blank" rel="noreferrer"
+            <a href={wa('Hola Farmacia Mitre 2, quería hacer una consulta.')} target="_blank" rel="noreferrer"
               className="flex items-center gap-2 bg-pharma-primary text-white px-5 py-2.5 rounded-full font-bold text-sm hover:bg-pharma-dark transition-colors shadow-md shadow-pharma-primary/25">
               <MessageCircle size={16} /> Consultar
             </a>
@@ -213,7 +218,7 @@ const Navbar = ({ cartCount, onOpenCart }: { cartCount: number; onOpenCart: () =
                   {link.name}
                 </a>
               ))}
-              <a href={wa('Hola Farmacia Mitre, quería hacer una consulta.')} target="_blank" rel="noreferrer"
+              <a href={wa('Hola Farmacia Mitre 2, quería hacer una consulta.')} target="_blank" rel="noreferrer"
                 className="mt-3 flex w-full items-center justify-center gap-2 bg-pharma-primary text-white px-5 py-3 rounded-xl font-bold shadow-md">
                 <MessageCircle size={18} /> Consultar por WhatsApp
               </a>
@@ -236,7 +241,7 @@ const Hero = () => (
         <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.55 }}>
           <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-pharma-light text-pharma-dark text-xs font-bold mb-6 border border-pharma-primary/20 tracking-wide">
             <ShieldCheck size={14} className="text-pharma-primary" />
-            Farmacia Mitre · Mar del Plata · 24hs
+            Farmacia Mitre 2 · Mar del Plata · 9 a 22hs
           </div>
           <h1 className="text-4xl sm:text-5xl lg:text-[3.5rem] font-black font-heading text-pharma-dark leading-[1.1] mb-5 tracking-tight">
             Suplementación <br />
@@ -260,7 +265,7 @@ const Hero = () => (
             {[
               { val: '+20', label: 'Marcas' },
               { val: '+100', label: 'Productos' },
-              { val: '24hs', label: 'Atención' },
+              { val: '9-22hs', label: 'Horario' },
             ].map((s) => (
               <div key={s.label}>
                 <p className="text-2xl font-black font-heading text-pharma-dark">{s.val}</p>
@@ -320,7 +325,7 @@ const Nosotros = () => {
   const features = [
     { icon: Stethoscope,  title: 'Atención farmacéutica',  desc: 'Te asesora un profesional matriculado, no un vendedor.' },
     { icon: Award,        title: 'Productos originales',   desc: 'Solo marcas auditadas con trazabilidad de origen.' },
-    { icon: Truck,        title: 'Retiro 24hs',            desc: 'Pedido listo el mismo día en Av. Independencia 1234.' },
+    { icon: Truck,        title: 'Retiro mismo día',        desc: 'Pedido listo el mismo día. Av. Peralta Ramos 2481.' },
     { icon: MessageCircle,title: 'Consulta directa',       desc: 'Hablás por WhatsApp con quien te va a atender.' },
   ];
   return (
@@ -332,7 +337,7 @@ const Nosotros = () => {
             Una farmacia de barrio con espalda profesional
           </h2>
           <p className="text-gray-500">
-            Hace más de 20 años en Mar del Plata. Suplementación deportiva con la misma seriedad que un medicamento: marca, lote, vencimiento y consejo real.
+            En Av. Peralta Ramos 2481, Mar del Plata. Todos los días de 9 a 22hs. Suplementación deportiva con la misma seriedad que un medicamento: marca, lote, vencimiento y consejo real.
           </p>
         </div>
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-5">
@@ -501,7 +506,7 @@ const Catalog = ({ onAddToCart, onShowModal, initialCategory, onCategoryUsed }: 
                           <Plus size={15} /> Agregar al pedido
                         </button>
                         <a
-                          href={wa(`Hola Farmacia Mitre, vi este producto en su catálogo web:\n\n*${product.name}* (${product.brand})\nPrecio: ${product.price}\n\n¿Tienen disponible?`)}
+                          href={wa(`Hola Farmacia Mitre 2, vi este producto en su catálogo web:\n\n*${product.name}* (${product.brand})\nPrecio: ${product.price}\n\n¿Tienen disponible?`)}
                           target="_blank" rel="noreferrer"
                           onClick={(e) => e.stopPropagation()}
                           className="w-full flex items-center justify-center gap-1.5 bg-pharma-light hover:bg-[#25D366] text-pharma-dark hover:text-white py-2.5 rounded-xl font-bold text-sm transition-colors"
@@ -557,7 +562,7 @@ const ProductModal = ({ product, onClose, onAddToCart }: {
             <div className="flex items-center gap-4 mb-5 py-4 border-t border-b border-gray-100 text-sm font-semibold">
               <div className="flex items-center gap-1.5 text-pharma-primary"><CheckCircle2 size={16} /> {product.stock}</div>
               <div className="w-px h-4 bg-gray-200" />
-              <div className="flex items-center gap-1.5 text-gray-500"><Clock size={16} /> Retiro 24hs</div>
+              <div className="flex items-center gap-1.5 text-gray-500"><Clock size={16} /> Retiro mismo día</div>
             </div>
             <p className="text-3xl font-black font-heading text-pharma-dark mb-6">{product.price}</p>
             <div className="flex flex-col gap-2.5">
@@ -598,7 +603,7 @@ const CartSidebar = ({ isOpen, onClose, cart, setCart }: {
   }, [cart]);
 
   const generateWhatsAppMessage = () => {
-    let msg = "¡Hola Farmacia Mitre! Quiero hacer un pedido desde su catálogo web:\n\n🛍️ *Mi Pedido:*\n";
+    let msg = "¡Hola Farmacia Mitre 2! Quiero hacer un pedido desde su catálogo web:\n\n🛍️ *Mi Pedido:*\n";
     cart.forEach(item => { msg += `- ${item.quantity}x ${item.product.name} (${item.product.brand})\n`; });
     if (totalNumeric > 0) msg += `\n💰 *Subtotal:* $ ${totalNumeric.toLocaleString('es-AR')}\n`;
     if (hasConsultar) msg += "⚠️ _Confirmar precio de productos marcados como Consultar._\n";
@@ -701,22 +706,22 @@ const Footer = ({ onSelectCategory }: { onSelectCategory: (cat: string) => void 
             </div>
             <div>
               <p className="font-heading font-black text-base leading-none text-white">farmacia</p>
-              <p className="font-heading font-bold text-sm leading-none text-pharma-primary tracking-wider uppercase">mitre</p>
+              <p className="font-heading font-bold text-sm leading-none text-pharma-primary tracking-wider uppercase">mitre 2</p>
             </div>
           </div>
           <p className="text-slate-400 text-sm mb-5 max-w-xs leading-relaxed">
-            Tu farmacia de confianza en Mar del Plata. Especialistas en suplementación deportiva y atención 24 horas.
+            Tu farmacia de confianza en Mar del Plata. Especialistas en suplementación deportiva. Todos los días de 9 a 22hs.
           </p>
           <div className="flex gap-3">
-            <a href="https://www.instagram.com/" target="_blank" rel="noreferrer"
+            <a href={INSTAGRAM} target="_blank" rel="noreferrer"
               className="w-9 h-9 rounded-xl bg-white/5 flex items-center justify-center text-slate-300 hover:bg-pharma-primary hover:text-white transition-colors" aria-label="Instagram">
               <Instagram size={17} />
             </a>
-            <a href={wa('Hola Farmacia Mitre, quería hacer una consulta.')} target="_blank" rel="noreferrer"
+            <a href={wa('Hola Farmacia Mitre 2, quería hacer una consulta.')} target="_blank" rel="noreferrer"
               className="w-9 h-9 rounded-xl bg-white/5 flex items-center justify-center text-slate-300 hover:bg-[#25D366] hover:text-white transition-colors" aria-label="WhatsApp">
               <MessageCircle size={17} />
             </a>
-            <a href="mailto:contacto@farmaciamitre.com.ar"
+            <a href="mailto:farmaciamitre2mdp@gmail.com"
               className="w-9 h-9 rounded-xl bg-white/5 flex items-center justify-center text-slate-300 hover:bg-pharma-primary hover:text-white transition-colors" aria-label="Email">
               <Mail size={17} />
             </a>
@@ -755,25 +760,24 @@ const Footer = ({ onSelectCategory }: { onSelectCategory: (cat: string) => void 
           <ul className="space-y-3 text-sm text-slate-400">
             <li className="flex items-start gap-2.5">
               <MapPin size={16} className="text-pharma-primary shrink-0 mt-0.5" />
-              <a href="https://maps.google.com/?q=Av.+Independencia+1234,+Mar+del+Plata"
-                target="_blank" rel="noreferrer" className="hover:text-white transition-colors">
-                Av. Independencia 1234<br />Mar del Plata
+              <a href={ADDRESS_MAPS} target="_blank" rel="noreferrer" className="hover:text-white transition-colors">
+                {ADDRESS}
               </a>
             </li>
             <li className="flex items-center gap-2.5">
               <Clock size={16} className="text-pharma-primary shrink-0" />
-              Atención 24 Horas
+              {HOURS}
             </li>
             <li className="flex items-center gap-2.5">
               <Phone size={16} className="text-pharma-primary shrink-0" />
-              <a href={`tel:+${WHATSAPP}`} className="hover:text-white transition-colors">+54 9 223 000-0000</a>
+              <a href={`tel:+${WHATSAPP}`} className="hover:text-white transition-colors">{PHONE_DISPLAY}</a>
             </li>
           </ul>
         </div>
       </div>
 
       <div className="pt-6 border-t border-white/10 flex flex-col sm:flex-row justify-between items-center gap-2 text-xs text-slate-500 font-medium">
-        <p>© {new Date().getFullYear()} Farmacia Mitre. Todos los derechos reservados.</p>
+        <p>© {new Date().getFullYear()} Farmacia Mitre 2. Todos los derechos reservados.</p>
         <div className="flex items-center gap-1 opacity-70">
           <ShieldCheck size={12} /> Compra local segura
         </div>
@@ -784,7 +788,7 @@ const Footer = ({ onSelectCategory }: { onSelectCategory: (cat: string) => void 
 
 // --- Floating WhatsApp ---
 const FloatingWhatsApp = () => (
-  <a href={wa('Hola Farmacia Mitre, quería hacer una consulta.')} target="_blank" rel="noreferrer"
+  <a href={wa('Hola Farmacia Mitre 2, quería hacer una consulta.')} target="_blank" rel="noreferrer"
     className="fixed bottom-6 right-6 z-[60] bg-[#25D366] text-white p-4 rounded-full shadow-[0_8px_30px_rgba(37,211,102,0.45)] hover:scale-110 active:scale-95 transition-all group flex items-center justify-center">
     <MessageCircle size={28} />
     <span className="absolute right-[110%] whitespace-nowrap bg-white text-gray-800 text-xs font-bold py-2 px-3 rounded-xl shadow-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
